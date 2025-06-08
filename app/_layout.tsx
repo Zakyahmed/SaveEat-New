@@ -1,29 +1,29 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
+// app/_layout.js
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
+import React from 'react';
+import { AuthProvider } from '../context/AuthContext';
+import { FoodProvider } from '../context/FoodContext';
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <AuthProvider>
+      <FoodProvider>
+        <StatusBar style="auto" />
+        <Stack>
+          <Stack.Screen 
+            name="(tabs)" 
+            options={{ headerShown: false }} 
+          />
+          <Stack.Screen 
+            name="restaurant/invendus/formulaire" 
+            options={{ 
+              title: "Formulaire d'invendu",
+              presentation: 'modal' 
+            }} 
+          />
+        </Stack>
+      </FoodProvider>
+    </AuthProvider>
   );
 }
